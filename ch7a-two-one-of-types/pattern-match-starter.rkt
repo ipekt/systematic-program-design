@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-reader.ss" "lang")((modname pattern-match-starter) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname pattern-match-starter) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
 ;; pattern-match-starter.rkt
 
@@ -68,8 +68,8 @@
 ;;
 ;;                                     lst
 ;;                           empty           (cons 1String ListOf1String)                
-;; p                                        |
-;; a    empty                   true        |  false
+;; p                                        
+;; a    empty                             true
 ;; t                         --------------------------------
 ;; t   (cons "A" Pattern)                   |  (if (alphabetic? (first lst))
 ;; e                                        |     (pattern-match? (rest pattern) (rest lst))
@@ -83,7 +83,7 @@
 ;; Pattern ListOf1String -> Boolean
 ;; produce true if pattern matches first part or all parts of ListOf1String
 (check-expect (pattern-match? empty empty) true)
-(check-expect (pattern-match? empty (list "a")) false)
+(check-expect (pattern-match? empty (list "a")) true)
 (check-expect (pattern-match? (list "A") empty) false)
 (check-expect (pattern-match? (list "A" "N") (list "V" "6")) true)
 (check-expect (pattern-match? (list "A" "N" "N" "A" "N") (list "V" "6" "2" "B" "1")) true)
@@ -94,10 +94,13 @@
 ;; pattern is not empty and lst is empty || pattern is empty and list is not empty 
 
 (define (pattern-match? pattern lst)
-  (cond [(and (empty? pattern) (empty? lst)) true]
-        []
-        []
-        [])
+  (cond [(empty? pattern) true]
+        [(empty? lst) false]
+        [(and (equal? "A" (first pattern)) (alphabetic? (first lst)))
+         (pattern-match? (rest pattern) (rest lst))]
+        [(and (equal? "N" (first pattern)) (numeric? (first lst)))
+          (pattern-match? (rest pattern) (rest lst))]
+        [else false]))
 
 
 
